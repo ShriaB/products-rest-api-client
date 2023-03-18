@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/allProductsFragment">
+
+    <fragment
+        android:id="@+id/allProductsFragment"
+        android:name="com.example.productsrestapi.ui.fragments.AllProductsFragment"
+        android:label="AllProductsFragment"
+        tools:layout="@layout/fragment_all_products">
+        <action
+            android:id="@+id/action_allProductsFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment" />
+        <action
+            android:id="@+id/action_allProductsFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newProductFragment"
+        android:name="com.example.productsrestapi.ui.fragments.NewProductFragment"
+        android:label="NewProductFragment"
+        tools:layout="@layout/fragment_new_product">
+        <argument
+            android:name="itemId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.productsrestapi.ui.fragments.ProductDetailFragment"
+        android:label="ProductDetailFragment"
+        tools:layout="@layout/fragment_product_detail">
+        <action
+            android:id="@+id/action_productDetailFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="itemId"
+            app:argType="integer" />
+    </fragment>
+</navigation>

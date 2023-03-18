@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Products Rest Api</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="get_btn">GET</string>
+    <string name="post_btn">POST</string>
+    <string name="put_btn">PUT</string>
+    <string name="delete_btn">DELETE</string>
+    <string name="save_btn">Save</string>
+</resources>
