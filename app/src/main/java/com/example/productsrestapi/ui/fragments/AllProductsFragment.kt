@@ -11,15 +11,17 @@ import androidx.navigation.findNavController
 import com.example.productsrestapi.R
 import com.example.productsrestapi.databinding.FragmentAllProductsBinding
 import com.example.productsrestapi.ui.ProductsViewModel
-import com.example.productsrestapi.ui.ProductsViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AllProductsFragment : Fragment() {
 
     private lateinit var binding: FragmentAllProductsBinding
 
-    private val viewModel: ProductsViewModel by activityViewModels {
-        ProductsViewModelFactory()
-    }
+    /**
+     * Activity Shared VIewModel in fragments
+     */
+    private val viewModel by activityViewModel<ProductsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +35,6 @@ class AllProductsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Instanciating the ProductListAdapter by passing in the click listener
         val adapter = ProductListAdapter{
-            viewModel.getSingleProduct(it.id)
             val args = bundleOf(
                     "itemId" to it.id,
             )

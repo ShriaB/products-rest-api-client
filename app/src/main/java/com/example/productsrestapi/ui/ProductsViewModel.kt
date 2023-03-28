@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.productsrestapi.model.GetResponse
 import com.example.productsrestapi.model.ProductsItem
-import com.example.productsrestapi.network.ProductsApi
+import com.example.productsrestapi.network.ProductsApiService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
-class ProductsViewModel: ViewModel() {
+class ProductsViewModel(private val productsApi: ProductsApiService): ViewModel() {
 
     var res = MutableLiveData<String>()
     private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
@@ -25,11 +25,9 @@ class ProductsViewModel: ViewModel() {
     fun getAllProducts(){
         viewModelScope.launch{
             try{
-                val response = ProductsApi.retrofitService.getProducts()
+                val response = productsApi.getProducts()
                 if(response.isSuccessful) {
                     allProductsItems.value = response.body()?.products
-
-//                    Log.d("MyDebug", "${allProductsItems.value}")
                 }
             }catch (e: Exception){
                 Log.d("MyDebug", "Failure: ${e.message}")
@@ -40,10 +38,9 @@ class ProductsViewModel: ViewModel() {
     fun getSingleProduct(id: Int){
         viewModelScope.launch{
             try{
-                val response = ProductsApi.retrofitService.getProduct(id)
+                val response = productsApi.getProduct(id)
                 if(response.isSuccessful) {
                     product.value = response.body()
-//                    Log.d("MyDebug", "res: ${product.value}")
                 }
             }catch (e: Exception){
                 Log.d("MyDebug", "Failure: ${e.message}")
@@ -67,14 +64,13 @@ class ProductsViewModel: ViewModel() {
 
         viewModelScope.launch {
             try{
-                val response = ProductsApi.retrofitService.createProduct(newProduct)
+                val response = productsApi.createProduct(newProduct)
                 if(response.isSuccessful) {
                     res.value = gson.toJson(
                         JsonParser.parseString(
                             response.body()?.string()
                         )
                     )
-                    Log.d("MyDebug", "Success: ${res.value}")
                 }
             }catch (e: Exception){
                 Log.d("MyDebug", "Failure: ${e.message}")
@@ -95,18 +91,16 @@ class ProductsViewModel: ViewModel() {
     fun updateProduct(id: Int, title: String="", brand: String="", description: String="", stock: Int=0, price: Int=0){
 
         val updatedProduct = getUpdatedFieldMap(title, brand, description, stock, price)
-        Log.d("MyDebug", "In updateProduct")
 
         viewModelScope.launch {
             try{
-                val response = ProductsApi.retrofitService.updateProduct(id, updatedProduct)
+                val response = productsApi.updateProduct(id, updatedProduct)
                 if(response.isSuccessful) {
                     res.value = gson.toJson(
                         JsonParser.parseString(
                             response.body()?.string()
                         )
                     )
-                    Log.d("MyDebug", "Success: ${res.value}")
                 }
             }catch (e: Exception){
                 Log.d("MyDebug", "Failure: ${e.message}")
@@ -117,14 +111,13 @@ class ProductsViewModel: ViewModel() {
     fun deleteProduct(id: Int){
         viewModelScope.launch {
             try{
-                val response = ProductsApi.retrofitService.deleteProduct(id)
+                val response = productsApi.deleteProduct(id)
                 if(response.isSuccessful) {
                     res.value = gson.toJson(
                         JsonParser.parseString(
                             response.body()?.string()
                         )
                     )
-                    Log.d("MyDebug", "Success: ${res.value}")
                 }
             }catch (e: Exception){
                 Log.d("MyDebug", "Failure: ${e.message}")
@@ -134,16 +127,5 @@ class ProductsViewModel: ViewModel() {
 
     init {
         getAllProducts()
-    }
-}
-
-
-class ProductsViewModelFactory: ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ProductsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ProductsViewModel() as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

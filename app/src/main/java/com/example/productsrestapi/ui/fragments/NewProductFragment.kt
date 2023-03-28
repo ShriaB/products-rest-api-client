@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.productsrestapi.databinding.FragmentNewProductBinding
 import com.example.productsrestapi.ui.ProductsViewModel
-import com.example.productsrestapi.ui.ProductsViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewProductFragment : Fragment() {
 
     lateinit var binding: FragmentNewProductBinding
-    private val viewModel: ProductsViewModel by activityViewModels {
-        ProductsViewModelFactory()
-    }
+    private val viewModel by activityViewModel<ProductsViewModel>()
     var itemId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {

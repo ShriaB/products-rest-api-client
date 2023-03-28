@@ -13,15 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val BASE_URL = "https://dummyjson.com"
 
-//private val moshi = Moshi.Builder()
-//    .add(KotlinJsonAdapterFactory())
-//    .build()
-
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .build()
-
 interface ProductsApiService {
     // Read
     @GET("/products")
@@ -42,10 +33,4 @@ interface ProductsApiService {
     // Delete
     @DELETE("/products/{id}")
     suspend fun deleteProduct(@Path("id") itemId: Int): Response<ResponseBody>
-}
-
-object ProductsApi{
-    val retrofitService: ProductsApiService by lazy {
-        retrofit.create(ProductsApiService::class.java)
-    }
 }

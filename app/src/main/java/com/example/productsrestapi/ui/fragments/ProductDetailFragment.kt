@@ -14,13 +14,13 @@ import com.example.productsrestapi.R
 import com.example.productsrestapi.databinding.FragmentProductDetailBinding
 import com.example.productsrestapi.model.ProductsItem
 import com.example.productsrestapi.ui.ProductsViewModel
-import com.example.productsrestapi.ui.ProductsViewModelFactory
+import org.koin.android.scope.AndroidScopeComponent
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProductDetailFragment : Fragment() {
+class ProductDetailFragment : Fragment(){
 
-    private val viewModel: ProductsViewModel by activityViewModels {
-        ProductsViewModelFactory()
-    }
+    private val viewModel by activityViewModel<ProductsViewModel>()
 
     private lateinit var binding: FragmentProductDetailBinding
     private var itemId: Int = 0
@@ -42,6 +42,7 @@ class ProductDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.getSingleProduct(itemId)
         viewModel.product.observe(this.viewLifecycleOwner) {
             binding.product = viewModel.product.value
             binding.lifecycleOwner = this
